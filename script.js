@@ -65,20 +65,35 @@ function appendImageToCard(lat, lon) {
 			// Use current weather description in the Pexels API query
 			const pexelsUrl = `https://api.pexels.com/v1/search?query=${encodeURIComponent(currentWeather.description)}&per_page=1&page=${Math.floor(Math.random() * 100)}`;
 
-			fetch(pexelsUrl, {
-				headers: {
-					'Authorization': PEXELS_API_KEY
-				}
-			})
-				.then(response => response.json())
-				.then(data => {
-					const imageUrl = data.photos[0].src.large;
-					// Fetch forecast data next
-					fetchForecast(lat, lon)
-						.then(forecastData => {
+			// Fetch forecast data next
+			fetchForecast(lat, lon)
+				.then(forecastData => {
+					// Create an array of Pexels API URLs to fetch images for each forecast day
+					const pexelsUrls = forecastData.map(day => `https://api.pexels.com/v1/search?query=${encodeURIComponent(day.description)}&per_page=1&page=${Math.floor(Math.random() * 100)}`);
+
+					// Add the current weather URL to the array of Pexels API URLs
+					pexelsUrls.unshift(pexelsUrl);
+
+					// Use Promise.all() to fetch all the images at once
+					Promise.all(pexelsUrls.map(url => {
+						return fetch(url, {
+							headers: {
+								'Authorization': PEXELS_API_KEY
+							}
+						})
+							.then(response => response.json())
+					}))
+						.then(responses => {
+							// Extract the image URLs from each Pexels API response
+							const imageUrls = responses.map(response => {
+								return response.photos[0].src.large;
+							});
+
 							// Create cards for both the current weather and the forecast data
-							const currentWeatherCard = createCard(imageUrl, currentWeather);
-							const forecastCards = forecastData.map(day => createCard(`https://openweathermap.org/img/w/${day.icon}.png`, day));
+							const currentWeatherCard = createCard(imageUrls[0], currentWeather, 'Now');
+							const forecastCards = forecastData.map((day, index) => {
+								return createCard(imageUrls[index+1], day, day.date);
+							});
 
 							// Combine the cards into a single string and add them to the card container
 							const cards = [currentWeatherCard, ...forecastCards].join('');
@@ -86,11 +101,11 @@ function appendImageToCard(lat, lon) {
 							cardContainer.innerHTML = cards;
 						})
 						.catch(error => {
-							console.error("Error fetching forecast data:", error);
+							console.error("Error fetching images from Pexels:", error);
 						});
 				})
 				.catch(error => {
-					console.error("Error fetching image from Pexels:", error);
+					console.error("Error fetching forecast data:", error);
 				});
 		})
 		.catch(error => {
@@ -99,18 +114,16 @@ function appendImageToCard(lat, lon) {
 }
 
 
-
-
-function createCard(imageUrl, weather) {
+function createCard(imageUrl, weather, day) {
 	return `
-    <div class="card" style="width: 18rem;">
-      <img src="${imageUrl}" class="card-img-top" alt="Weather image">
-      <div class="card-body">
-        <h5 class="card-title">${weather.city}, ${weather.country} - ${weather.temperature}°C</h5>
-        <p class="card-text">${weather.description}</p>
-      </div>
-    </div>
-  `;
+		<div class="card" style="width: 18rem;">
+			<img src="${imageUrl}" class="card-img-top" alt="Weather image">
+			<div class="card-body">
+				<h5 class="card-title">${day} - ${weather.temperature}°C</h5>
+				<p class="card-text">${weather.description}</p>
+			</div>
+		</div>
+	`;
 }
 
 

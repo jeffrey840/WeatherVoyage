@@ -5,9 +5,10 @@ const OPENWEATHERMAP_API_KEY = OPEN_WEATHER_APPID;
 
 const MAPBOX_ACCESS_TOKEN = MAPBOX_API_KEY;
 
+let map;
+
 function fetchCurrentWeather(location) {
 	const url = `https://api.openweathermap.org/data/2.5/weather?q=${location}&units=metric&appid=${OPENWEATHERMAP_API_KEY}`;
-
 	return fetch(url)
 		.then(response => response.json())
 		.then(data => {
@@ -71,13 +72,6 @@ appendImageToCard();
 // Initialize Mapbox GL
 mapboxgl.accessToken = MAPBOX_ACCESS_TOKEN;
 
-// // Create a new map instance
-// const map = new mapboxgl.Map({
-// 	container: 'map', // container ID
-// 	style: 'mapbox://styles/mapbox/streets-v11', // style URL
-// 	center: [-0.127647, 51.507222], // starting position [lng, lat]
-// 	zoom: 9 // starting zoom level
-// });
 
 //search functionality
 function geocode(searchInput) {
@@ -117,16 +111,17 @@ function initMapWithCurrentLocation() {
 		},
 		(error) => {
 			console.error('Error getting user location:', error);
-			alert('We could not get your location. The map will start at a default location.');
 			// Fall back to a default location (e.g., London) if the user's location cannot be determined
 			initMap([-0.127647, 51.507222]);
 		}
 	);
 }
 
+
+
 function initMap(centerCoordinates) {
 	// Create a new map instance
-	const map = new mapboxgl.Map({
+	map = new mapboxgl.Map({
 		container: 'map', // container ID
 		style: 'mapbox://styles/mapbox/streets-v11', // style URL
 		center: centerCoordinates, // starting position [lng, lat]

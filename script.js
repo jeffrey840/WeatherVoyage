@@ -27,15 +27,45 @@ function fetchCurrentWeather(lat, lon) {
 		});
 }
 
+function fetchForecast(lat, lon) {
+	const url = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&units=metric&appid=${OPENWEATHERMAP_API_KEY}`;
+
+	return fetch(url)
+		.then(response => response.json())
+		.then(data => {
+			// Extract the forecast data for the next 5 days
+			const forecastData = data.list.filter((item, index) => index % 8 === 0).map(item => {
+				return {
+					date: item.dt_txt.split(' ')[0],
+					temperature: item.main.temp,
+					description: item.weather[0].description,
+					icon: item.weather[0].icon
+				}
+			});
+
+			if (forecastData.length === 0) {
+				throw new Error('No forecast data available');
+			}
+
+			return forecastData;
+		})
+		.catch(error => {
+			console.error("Error fetching forecast data:", error);
+			throw error;
+		});
+}
+
+
+
 
 function appendImageToCard(lat, lon) {
 	// Fetch current weather data first
 	fetchCurrentWeather(lat, lon)
-		.then(weather => {
-			// Use weather description in the Pexels API query
-			const url = `https://api.pexels.com/v1/search?query=${encodeURIComponent(weather.description)}&per_page=1&page=${Math.floor(Math.random() * 100)}`;
+		.then(currentWeather => {
+			// Use current weather description in the Pexels API query
+			const pexelsUrl = `https://api.pexels.com/v1/search?query=${encodeURIComponent(currentWeather.description)}&per_page=1&page=${Math.floor(Math.random() * 100)}`;
 
-			fetch(url, {
+			fetch(pexelsUrl, {
 				headers: {
 					'Authorization': PEXELS_API_KEY
 				}
@@ -43,8 +73,21 @@ function appendImageToCard(lat, lon) {
 				.then(response => response.json())
 				.then(data => {
 					const imageUrl = data.photos[0].src.large;
-					// Create the card with the relevant image and weather data
-					createCard(imageUrl, weather);
+					// Fetch forecast data next
+					fetchForecast(lat, lon)
+						.then(forecastData => {
+							// Create cards for both the current weather and the forecast data
+							const currentWeatherCard = createCard(imageUrl, currentWeather);
+							const forecastCards = forecastData.map(day => createCard(`https://openweathermap.org/img/w/${day.icon}.png`, day));
+
+							// Combine the cards into a single string and add them to the card container
+							const cards = [currentWeatherCard, ...forecastCards].join('');
+							const cardContainer = document.getElementById('card-container');
+							cardContainer.innerHTML = cards;
+						})
+						.catch(error => {
+							console.error("Error fetching forecast data:", error);
+						});
 				})
 				.catch(error => {
 					console.error("Error fetching image from Pexels:", error);
@@ -57,10 +100,9 @@ function appendImageToCard(lat, lon) {
 
 
 
-function createCard(imageUrl, weather) {
-	const cardContainer = document.getElementById('card-container');
 
-	const card = `
+function createCard(imageUrl, weather) {
+	return `
     <div class="card" style="width: 18rem;">
       <img src="${imageUrl}" class="card-img-top" alt="Weather image">
       <div class="card-body">
@@ -69,9 +111,8 @@ function createCard(imageUrl, weather) {
       </div>
     </div>
   `;
-
-	cardContainer.innerHTML = card;
 }
+
 
 // appendImageToCard();
 

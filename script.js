@@ -7,8 +7,9 @@ const MAPBOX_ACCESS_TOKEN = MAPBOX_API_KEY;
 
 let map;
 
-function fetchCurrentWeather(location) {
-	const url = `https://api.openweathermap.org/data/2.5/weather?q=${location}&units=metric&appid=${OPENWEATHERMAP_API_KEY}`;
+function fetchCurrentWeather(lat, lon) {
+	const url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&appid=${OPENWEATHERMAP_API_KEY}`;
+
 	return fetch(url)
 		.then(response => response.json())
 		.then(data => {
@@ -27,24 +28,30 @@ function fetchCurrentWeather(location) {
 }
 
 
-function appendImageToCard() {
-	const url = `https://api.pexels.com/v1/search?query=weather&per_page=1&page=${Math.floor(Math.random() * 100)}`;
+function appendImageToCard(lat, lon) {
+	// Fetch current weather data first
+	fetchCurrentWeather(lat, lon)
+		.then(weather => {
+			// Use weather description in the Pexels API query
+			const url = `https://api.pexels.com/v1/search?query=${encodeURIComponent(weather.description)}&per_page=1&page=${Math.floor(Math.random() * 100)}`;
 
-	fetch(url, {
-		headers: {
-			'Authorization': PEXELS_API_KEY
-		}
-	})
-		.then(response => response.json())
-		.then(data => {
-			const imageUrl = data.photos[0].src.large;
-			return fetchCurrentWeather("London") // Replace "London" with the desired location
-				.then(weather => {
+			fetch(url, {
+				headers: {
+					'Authorization': PEXELS_API_KEY
+				}
+			})
+				.then(response => response.json())
+				.then(data => {
+					const imageUrl = data.photos[0].src.large;
+					// Create the card with the relevant image and weather data
 					createCard(imageUrl, weather);
+				})
+				.catch(error => {
+					console.error("Error fetching image from Pexels:", error);
 				});
 		})
 		.catch(error => {
-			console.error("Error fetching image from Pexels:", error);
+			console.error("Error fetching weather data:", error);
 		});
 }
 
@@ -66,7 +73,7 @@ function createCard(imageUrl, weather) {
 	cardContainer.innerHTML = card;
 }
 
-appendImageToCard();
+// appendImageToCard();
 
 
 // Initialize Mapbox GL
@@ -77,7 +84,7 @@ mapboxgl.accessToken = MAPBOX_ACCESS_TOKEN;
 function geocode(searchInput) {
 	const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(searchInput)}.json?access_token=${MAPBOX_ACCESS_TOKEN}`;
 
-	fetch(url)
+	return fetch(url)
 		.then(response => response.json())
 		.then(data => {
 			if (data.features.length > 0) {
@@ -87,8 +94,10 @@ function geocode(searchInput) {
 					zoom: 14,
 					essential: true
 				});
+				return coordinates; // Return the coordinates
 			} else {
 				alert('Location not found. Please try another search.');
+				return null;
 			}
 		})
 		.catch(error => {
@@ -99,23 +108,17 @@ function geocode(searchInput) {
 document.getElementById('search-form').addEventListener('submit', (e) => {
 	e.preventDefault();
 	const searchInput = document.getElementById('search-input').value;
-	geocode(searchInput);
+	geocode(searchInput)
+		.then(coordinates => {
+			if (coordinates) {
+				// Fetch new weather data and update the card
+				appendImageToCard(coordinates[1], coordinates[0]);
+			}
+		})
+		.catch(error => {
+			console.error("Error updating weather card:", error);
+		});
 });
-
-
-function initMapWithCurrentLocation() {
-	navigator.geolocation.getCurrentPosition(
-		(position) => {
-			const userCoordinates = [position.coords.longitude, position.coords.latitude];
-			initMap(userCoordinates);
-		},
-		(error) => {
-			console.error('Error getting user location:', error);
-			// Fall back to a default location (e.g., London) if the user's location cannot be determined
-			initMap([-0.127647, 51.507222]);
-		}
-	);
-}
 
 
 
@@ -129,6 +132,31 @@ function initMap(centerCoordinates) {
 	});
 }
 
+// initMapWithCurrentLocation();
+
+function initMapWithCurrentLocation() {
+	navigator.geolocation.getCurrentPosition(
+		(position) => {
+			const userCoordinates = [position.coords.longitude, position.coords.latitude];
+			initMap(userCoordinates);
+
+			// Call appendImageToCard with the user's latitude and longitude
+			const userLat = position.coords.latitude;
+			const userLon = position.coords.longitude;
+			appendImageToCard(userLat, userLon);
+		},
+		(error) => {
+			console.error('Error getting user location:', error);
+			// Fall back to a default location (e.g., London) if the user's location cannot be determined
+			const defaultLocation = [-0.127647, 51.507222];
+			initMap(defaultLocation);
+
+			// Call appendImageToCard with the default location's latitude and longitude
+			const defaultLat = defaultLocation[1];
+			const defaultLon = defaultLocation[0];
+			appendImageToCard(defaultLat, defaultLon);
+		}
+	);
+}
+
 initMapWithCurrentLocation();
-
-

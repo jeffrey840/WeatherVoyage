@@ -20,3 +20,67 @@ Air quality index: Show the air quality index for the searched location, informi
 Weather-related points of interest: Display nearby weather-related points of interest, such as ski resorts, beaches, or parks, to help users find outdoor activities based on the current weather conditions.
 
 
+config.js
+PEXELS_API_KEY
+OPENWEATHERMAP_API_KEY
+MAPBOX_ACCESS_TOKEN
+
+weatherAPI.js
+fetchCurrentWeather()
+fetchForecast()
+
+pexelsAPI.js
+appendImageToCard()
+
+keywords.js
+weatherKeywords
+
+card.js
+createCard()
+
+mapbox.js
+geocode()
+initMap()
+initMapWithCurrentLocation()
+
+main.js
+Event listeners and initialization logic
+
+===========
+================
+=================
+
+config.js
+No imports required.
+
+weatherAPI.js
+javascript
+Copy code
+import { OPENWEATHERMAP_API_KEY } from './config.js';
+
+pexelsAPI.js
+javascript
+Copy code
+import { PEXELS_API_KEY } from './config.js';
+import { fetchCurrentWeather, fetchForecast } from './weatherAPI.js';
+import { weatherKeywords } from './keywords.js';
+import { createCard } from './card.js';
+
+keywords.js
+No imports required.
+
+card.js
+No imports required.
+
+mapbox.js
+javascript
+Copy code
+import { MAPBOX_ACCESS_TOKEN } from './config.js';
+import { appendImageToCard } from './pexelsAPI.js';
+
+main.js
+javascript
+Copy code
+import { initMapWithCurrentLocation } from './mapbox.js';
+import { geocode } from './mapbox.js';
+import { appendImageToCard } from './pexelsAPI.js';

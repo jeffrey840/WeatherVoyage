@@ -1,6 +1,8 @@
 
 Weather forecast: Display a 5-day or 7-day weather forecast for the searched location. You can show temperature, humidity, wind speed, and weather icons for each day.
 
+
+
 Weather alerts: Integrate weather alerts or severe weather warnings for the searched area, such as storm or flood warnings.
 
 Interactive weather layers: Allow users to toggle different weather layers on the map, such as temperature, precipitation, wind speed, and satellite imagery.

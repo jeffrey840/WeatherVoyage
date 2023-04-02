@@ -17,3 +17,18 @@
 #search-form.hidden {
     display: none;
 }
+
+
+.card-img {
+    display: flex;
+    align-items: center;
+}
+
+.card-img img {
+    width: 100%;
+    height: auto;
+}
+
+.card-body {
+    padding: 1rem;
+}

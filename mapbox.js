@@ -4,7 +4,10 @@ import { appendImageToCard } from './pexelsAPI.js';
 
 const MAPBOX_ACCESS_TOKEN = MAPBOX_API_KEY;
 
-let map
+let map;
+
+mapboxgl.accessToken = MAPBOX_ACCESS_TOKEN;
+
 export function geocode(searchInput) {
 	const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(searchInput)}.json?access_token=${MAPBOX_ACCESS_TOKEN}`;
 
@@ -29,7 +32,7 @@ export function geocode(searchInput) {
 		});
 }
 
-export function initMap(centerCoordinates) {
+ function initMap(centerCoordinates) {
 	// Create a new map instance
 	map = new mapboxgl.Map({
 		container: 'map', // container ID
@@ -39,7 +42,7 @@ export function initMap(centerCoordinates) {
 	});
 }
 
-export function initMapWithCurrentLocation() {
+ function initMapWithCurrentLocation() {
 	navigator.geolocation.getCurrentPosition(
 		(position) => {
 			const userCoordinates = [position.coords.longitude, position.coords.latitude];
@@ -63,3 +66,5 @@ export function initMapWithCurrentLocation() {
 		}
 	);
 }
+
+initMapWithCurrentLocation();

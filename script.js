@@ -18,7 +18,8 @@ function fetchCurrentWeather(lat, lon) {
 				country: data.sys.country,
 				temperature: data.main.temp,
 				description: data.weather[0].description,
-				icon: data.weather[0].icon
+				icon: data.weather[0].icon,
+				cityAndDescription: `${data.name} ${data.weather[0].description}`
 			};
 			return weather;
 		})
@@ -55,6 +56,45 @@ function fetchForecast(lat, lon) {
 		});
 }
 
+const weatherKeywords = {
+	'clear sky': 'clear',
+	'few clouds': 'partly cloudy',
+	'scattered clouds': 'partly cloudy',
+	'broken clouds': 'cloudy',
+	'overcast clouds': 'overcast',
+	'light rain': 'rain',
+	'moderate rain': 'rain',
+	'heavy intensity rain': 'rain',
+	'very heavy rain': 'rain',
+	'extreme rain': 'rain',
+	'freezing rain': 'rain',
+	'light snow': 'snow',
+	'moderate snow': 'snow',
+	'heavy snow': 'snow',
+	'sleet': 'sleet',
+	'shower rain': 'rain',
+	'thunderstorm': 'thunderstorm',
+	'thunderstorm with light rain': 'thunderstorm',
+	'thunderstorm with rain': 'thunderstorm',
+	'thunderstorm with heavy rain': 'thunderstorm',
+	'light thunderstorm': 'thunderstorm',
+	'heavy thunderstorm': 'thunderstorm',
+	'ragged thunderstorm': 'thunderstorm',
+	'thunderstorm with light drizzle': 'thunderstorm',
+	'thunderstorm with drizzle': 'thunderstorm',
+	'thunderstorm with heavy drizzle': 'thunderstorm',
+	'mist': 'fog',
+	'smoke': 'smoke',
+	'haze': 'haze',
+	'sand/ dust whirls': 'dust',
+	'fog': 'fog',
+	'sand': 'dust',
+	'dust': 'dust',
+	'volcanic ash': 'ash',
+	'squalls': 'windy',
+	'tornado': 'tornado'
+};
+
 
 
 
@@ -62,14 +102,28 @@ function appendImageToCard(lat, lon) {
 	// Fetch current weather data first
 	fetchCurrentWeather(lat, lon)
 		.then(currentWeather => {
-			// Use current weather description in the Pexels API query
-			const pexelsUrl = `https://api.pexels.com/v1/search?query=${encodeURIComponent(currentWeather.description)}&per_page=1&page=${Math.floor(Math.random() * 100)}`;
+			// Use current weather description and city name in the Pexels API query
+			let keyword = currentWeather.description.toLowerCase();
+			if (keyword in weatherKeywords) {
+				keyword = weatherKeywords[keyword];
+			} else {
+				keyword = currentWeather.description;
+			}
+			const pexelsUrl = `https://api.pexels.com/v1/search?query=${encodeURIComponent(keyword + ' ' + currentWeather.city)}&per_page=1&page=${Math.floor(Math.random() * 100)}`;
 
 			// Fetch forecast data next
 			fetchForecast(lat, lon)
 				.then(forecastData => {
 					// Create an array of Pexels API URLs to fetch images for each forecast day
-					const pexelsUrls = forecastData.map(day => `https://api.pexels.com/v1/search?query=${encodeURIComponent(day.description)}&per_page=1&page=${Math.floor(Math.random() * 100)}`);
+					const pexelsUrls = forecastData.map(day => {
+						let keyword = day.description.toLowerCase();
+						if (keyword in weatherKeywords) {
+							keyword = weatherKeywords[keyword];
+						} else {
+							keyword = day.description;
+						}
+						return `https://api.pexels.com/v1/search?query=${encodeURIComponent(keyword + ' ' + currentWeather.city)}&per_page=1&page=${Math.floor(Math.random() * 100)}`;
+					});
 
 					// Add the current weather URL to the array of Pexels API URLs
 					pexelsUrls.unshift(pexelsUrl);
@@ -180,7 +234,7 @@ function initMap(centerCoordinates) {
 	// Create a new map instance
 	map = new mapboxgl.Map({
 		container: 'map', // container ID
-		style: 'mapbox://styles/mapbox/streets-v11', // style URL
+		style: 'mapbox://styles/adoucett/cjf5k84bp0p7t2rmiwvwikhyn',
 		center: centerCoordinates, // starting position [lng, lat]
 		zoom: 9 // starting zoom level
 	});
@@ -214,3 +268,17 @@ function initMapWithCurrentLocation() {
 }
 
 initMapWithCurrentLocation();
+
+const searchForm = document.getElementById('search-form');
+const toggleSearchButton = document.getElementById('toggle-search-button');
+const icon = document.querySelector('#toggle-search-button i');
+
+toggleSearchButton.addEventListener('click', () => {
+	searchForm.classList.toggle('hidden');
+	if (searchForm.classList.contains('hidden')) {
+		icon.style.color = '#00f0a8'; // change color to green
+	} else {
+		icon.style.color = '#ff3d00'; // change color to red
+	}
+});
+

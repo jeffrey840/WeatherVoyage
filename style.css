@@ -1,0 +1,19 @@
+#search-container {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    z-index: 1;
+}
+
+#search-container .search-wrapper {
+    display: flex;
+    align-items: center;
+}
+
+#search-container .toggle-button-wrapper {
+    margin-right: 10px;
+}
+
+#search-form.hidden {
+    display: none;
+}

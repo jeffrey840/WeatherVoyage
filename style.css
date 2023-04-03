@@ -81,3 +81,16 @@
 .cards-wrapper {
     max-width: calc(100vw - 60px);
 }
+
+#cards-container {
+    max-width: calc(100vw - 20px);
+}
+
+#search-input {
+    width: 300px;
+}
+
+
+.navbar {
+    z-index: 2;
+}

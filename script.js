@@ -36,9 +36,9 @@ toggleCardsButton.addEventListener('click', () => {
 	const cardContainer = document.getElementById('card-container');
 	if (cardContainer.classList.contains('hidden')) {
 		cardContainer.classList.remove('hidden');
-		toggleCardsButton.textContent = 'Hide Cards';
+		toggleCardsButton.textContent = 'Hide 5 day forecast';
 	} else {
 		cardContainer.classList.add('hidden');
-		toggleCardsButton.textContent = 'Show Cards';
+		toggleCardsButton.textContent = 'Show 5 day forecast';
 	}
 });

@@ -29,103 +29,46 @@
 <!-- Your HTML content goes here -->
 
 
-
-
-<!-- This is a container for the map with a search bar and cards container -->
 <div id="map" style="width: 100%; height: 100vh;">
-	<!-- This is a container for the search bar with a button to toggle it -->
-	<div id="search-container" style="position: absolute; top: 10px; right: 10px; z-index: 1;">
-		<div class="search-wrapper">
-			<div class="toggle-button-wrapper">
-				<!-- This button toggles the visibility of the search bar -->
-				<button id="toggle-search-button" class="btn btn-light">
-					<i class="fa-solid fa-magnifying-glass" style="color: #00f0a8;"></i>
-				</button>
-			</div>
-			<!-- This is the search form, hidden by default -->
-			<form id="search-form" class="hidden">
-				<div class="input-group">
-					<!-- This is the search input -->
-					<input id="search-input" type="text" class="form-control" placeholder="Search location">
-					<div class="input-group-append">
-						<!-- This button submits the search form -->
-						<button class="btn btn-primary" type="submit">Search</button>
+
+	<nav class="navbar navbar-expand-lg navbar-light bg-light">
+		<div class="container-fluid">
+			<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbarNav">
+				<ul class="navbar-nav me-auto">
+					<li class="nav-item">
+						<button id="toggle-cards-button" class="btn btn-primary">Show 5 day forecast</button>
+					</li>
+				</ul>
+				<div id="search-container" class="d-flex align-items-center">
+					<div class="search-wrapper">
+						<div class="toggle-button-wrapper">
+							<button id="toggle-search-button" class="btn btn-light">
+								<i class="fa-solid fa-magnifying-glass" style="color: #00f0a8;"></i>
+							</button>
+						</div>
+						<form id="search-form" class="hidden">
+							<div class="input-group">
+								<input id="search-input" type="text" class="form-control" placeholder="Search location">
+								<div class="input-group-append">
+									<button class="btn btn-primary" type="submit">Search</button>
+								</div>
+							</div>
+						</form>
 					</div>
 				</div>
-			</form>
+			</div>
 		</div>
-	</div>
-	<!-- This button toggles the visibility of the cards container -->
-	<button id="toggle-cards-button" class="btn btn-primary">Hide Cards</button>
-	<!-- This is a container for the cards, hidden by default -->
-	<div id="cards-container" style="position: absolute; top: 50px; left: 10px; z-index: 1; right: 60%">
+	</nav>
+
+	<div id="cards-container" style="position: absolute; top: 10%; left: 10px; z-index: 1; right: 60%">
 		<div class="cards-wrapper">
 			<div id="card-container" class="hidden"></div>
 		</div>
 	</div>
 </div>
-<!-- ============================  first map end  ============================-->
-
-<!--<div id="map" style="width: 100%; height: 100vh;">-->
-<!--	<nav class="navbar navbar-expand-lg navbar-light bg-light">-->
-<!--		<div class="container-fluid">-->
-<!--			<a class="navbar-brand" href="#">Navbar</a>-->
-<!--			&lt;!&ndash; The navbar toggler button &ndash;&gt;-->
-<!--			<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">-->
-<!--				<span class="navbar-toggler-icon"></span>-->
-<!--			</button>-->
-<!--			&lt;!&ndash; The navbar menu &ndash;&gt;-->
-<!--			<div class="collapse navbar-collapse" id="navbarSupportedContent">-->
-<!--				&lt;!&ndash; The navbar menu items &ndash;&gt;-->
-<!--				<ul class="navbar-nav me-auto mb-2 mb-lg-0">-->
-<!--					&lt;!&ndash; A menu item with a link to the home page &ndash;&gt;-->
-<!--					<li class="nav-item">-->
-<!--						<a class="nav-link active" aria-current="page" href="#">Home</a>-->
-<!--					</li>-->
-<!--					&lt;!&ndash; A menu item with a link to another page &ndash;&gt;-->
-<!--					<li class="nav-item">-->
-<!--						<a class="nav-link" href="#">Link</a>-->
-<!--					</li>-->
-<!--					&lt;!&ndash; A dropdown menu item &ndash;&gt;-->
-<!--					<li class="nav-item dropdown">-->
-<!--						&lt;!&ndash; The dropdown toggle button &ndash;&gt;-->
-<!--						<a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">-->
-<!--							Dropdown-->
-<!--						</a>-->
-<!--						&lt;!&ndash; The dropdown menu items &ndash;&gt;-->
-<!--						<ul class="dropdown-menu">-->
-<!--							&lt;!&ndash; A dropdown menu item with a button &ndash;&gt;-->
-<!--							<li><a class="dropdown-item" href="#" id="toggle-cards-button">Hide Cards</a></li>-->
-<!--							&lt;!&ndash; A dropdown menu divider &ndash;&gt;-->
-<!--							<li><hr class="dropdown-divider"></li>-->
-<!--							&lt;!&ndash; A dropdown menu item with a link &ndash;&gt;-->
-<!--							<li><a class="dropdown-item" href="#">Something else here</a></li>-->
-<!--						</ul>-->
-<!--					</li>-->
-<!--					&lt;!&ndash; A disabled menu item &ndash;&gt;-->
-<!--					<li class="nav-item">-->
-<!--						<a class="nav-link disabled">Disabled</a>-->
-<!--					</li>-->
-<!--				</ul>-->
-<!--				&lt;!&ndash; The search form &ndash;&gt;-->
-<!--				<form class="d-flex" role="search">-->
-<!--					&lt;!&ndash; The search input field &ndash;&gt;-->
-<!--					<input class="form-control me-2" type="search" placeholder="Search location" aria-label="Search" id="search-input">-->
-<!--					&lt;!&ndash; The search button &ndash;&gt;-->
-<!--					<button class="btn btn-outline-success" type="submit">Search</button>-->
-<!--				</form>-->
-<!--			</div>-->
-<!--		</div>-->
-<!--	</nav>-->
-<!--	&lt;!&ndash; The container for the cards &ndash;&gt;-->
-<!--	<div id="cards-container" style="position: absolute; top: 70px; left: 10px; z-index: 1;">-->
-<!--		&lt;!&ndash; The wrapper for the cards &ndash;&gt;-->
-<!--		<div class="cards-wrapper">-->
-<!--			&lt;!&ndash; The container for the weather card &ndash;&gt;-->
-<!--			<div id="card-container" class="hidden"></div>-->
-<!--		</div>-->
-<!--	</div>-->
-<!--</div>-->
 
 
 <script src="keys.js" type="module"></script>

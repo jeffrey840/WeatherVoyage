@@ -32,21 +32,39 @@ export function geocode(searchInput) {
 		});
 }
 
- function initMap(centerCoordinates) {
-	// Create a new map instance
+function initMap(centerCoordinates, styleId) {
+	let styleUrl = `mapbox://styles/mapbox/${styleId}`;
+	if (styleId === 'adoucett/cjf5k84bp0p7t2rmiwvwikhyn') {
+		styleUrl = `mapbox://styles/${styleId}`;
+	}
+
 	map = new mapboxgl.Map({
-		container: 'map', // container ID
-		style: 'mapbox://styles/adoucett/cjf5k84bp0p7t2rmiwvwikhyn',
-		center: centerCoordinates, // starting position [lng, lat]
-		zoom: 9 // starting zoom level
+		container: 'map',
+		style: styleUrl,
+		center: centerCoordinates,
+		zoom: 9
 	});
 }
 
- function initMapWithCurrentLocation() {
+//mapbox://styles/adoucett/cjf5k84bp0p7t2rmiwvwikhyn
+
+//mapbox://styles/mapbox/navigation-night-v1
+
+const toggleMapButton = document.getElementById('toggle-map-button');
+let currentStyleIndex = 0;
+const styles = ['streets-v11','navigation-night-v1', 'outdoors-v11', 'light-v10', 'dark-v10', 'satellite-v9','v1/adoucett/cjf5k84bp0p7t2rmiwvwikhyn'];
+
+toggleMapButton.addEventListener('click', () => {
+	currentStyleIndex = (currentStyleIndex + 1) % styles.length;
+	const styleId = styles[currentStyleIndex];
+	map.setStyle(`mapbox://styles/mapbox/${styleId}`);
+});
+
+function initMapWithCurrentLocation() {
 	navigator.geolocation.getCurrentPosition(
 		(position) => {
 			const userCoordinates = [position.coords.longitude, position.coords.latitude];
-			initMap(userCoordinates);
+			initMap(userCoordinates, 'adoucett/cjf5k84bp0p7t2rmiwvwikhyn'); // Call initMap() with the custom style ID
 
 			// Call appendImageToCard with the user's latitude and longitude
 			const userLat = position.coords.latitude;
@@ -57,7 +75,7 @@ export function geocode(searchInput) {
 			console.error('Error getting user location:', error);
 			// Fall back to a default location (e.g., London) if the user's location cannot be determined
 			const defaultLocation = [-0.127647, 51.507222];
-			initMap(defaultLocation);
+			initMap(defaultLocation, styles[0]);
 
 			// Call appendImageToCard with the default location's latitude and longitude
 			const defaultLat = defaultLocation[1];

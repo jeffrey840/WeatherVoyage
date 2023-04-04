@@ -42,3 +42,7 @@ toggleCardsButton.addEventListener('click', () => {
 		toggleCardsButton.textContent = 'Show 5 day forecast';
 	}
 });
+
+
+
+

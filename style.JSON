@@ -6199,5 +6199,6 @@
   "modified": "2015-11-20T12:55:54.001Z",
   "owner": "themapsmith",
   "visibility": "public",
+  "protected": false,
   "draft": false
 }

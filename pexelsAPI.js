@@ -3,7 +3,7 @@ import {PEXEL_API_KEY} from './keys.js';
 const PEXELS_API_KEY = PEXEL_API_KEY;
 
 import { fetchCurrentWeather, fetchForecast, weatherKeywords } from './weatherAPI.js';
-// import { weatherKeywords } from './keywords.js';
+
 import { createCard } from './card.js';
 
 export function appendImageToCard(lat, lon) {

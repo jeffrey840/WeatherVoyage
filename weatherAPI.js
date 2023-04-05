@@ -30,11 +30,20 @@ export function fetchForecast(lat, lon) {
 	return fetch(url)
 		.then(response => response.json())
 		.then(data => {
-			// Extract the forecast data for the next 5 days
 			const forecastData = data.list.filter((item, index) => index % 8 === 0).map(item => {
+				const temperatureFahrenheit = (item.main.temp * 9 / 5) + 32;
+				// const dayOfWeek = moment(item.dt_txt).format('dddd');
+				const date = new Date(item.dt_txt);
+				const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+				const dayOfWeek = days[date.getDay()];
+
 				return {
 					date: item.dt_txt.split(' ')[0],
+					dayOfWeek: dayOfWeek,
 					temperature: item.main.temp,
+					temperatureFahrenheit: temperatureFahrenheit.toFixed(1),
+					humidity: item.main.humidity,
+					windSpeed: item.wind.speed,
 					description: item.weather[0].description,
 					icon: item.weather[0].icon
 				}

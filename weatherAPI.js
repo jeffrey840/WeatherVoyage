@@ -9,12 +9,20 @@ export function fetchCurrentWeather(lat, lon) {
 	return fetch(url)
 		.then(response => response.json())
 		.then(data => {
+			const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+			const date = new Date(data.dt_txt);
+			const dayOfWeek = days[date.getDay()];
+			const temperatureFahrenheit = (data.main.temp * 9 / 5) + 32;
 			const weather = {
 				city: data.name,
 				country: data.sys.country,
 				temperature: data.main.temp,
 				description: data.weather[0].description,
 				icon: data.weather[0].icon,
+				humidity: data.main.humidity,
+				windSpeed: data.wind.speed,
+				dayOfWeek: dayOfWeek,
+				temperatureFahrenheit: temperatureFahrenheit.toFixed(1),
 				cityAndDescription: `${data.name} ${data.weather[0].description}`
 			};
 			return weather;

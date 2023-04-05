@@ -52,9 +52,10 @@ export function appendImageToCard(lat, lon) {
 							});
 
 							// Create cards for both the current weather and the forecast data
-							const currentWeatherCard = createCard(imageUrls[0], currentWeather, 'Now');
+							const currentWeatherCard = createCard(imageUrls[0], currentWeather, 'Now', true);
+
 							const forecastCards = forecastData.map((day, index) => {
-								return createCard(imageUrls[index+1], day, day.date);
+								return createCard(imageUrls[index+1], day, day.date, false);
 							});
 
 							// Combine the cards into a single string and add them to the card container
@@ -74,3 +75,4 @@ export function appendImageToCard(lat, lon) {
 			console.error("Error fetching weather data:", error);
 		});
 }
+

@@ -1,15 +1,7 @@
 
-Weather forecast: Display a 5-day or 7-day weather forecast for the searched location. You can show temperature in f, humidity, wind speed, and weather icons for each day.
-
-
-
 Weather alerts: Integrate weather alerts or severe weather warnings for the searched area, such as storm or flood warnings.
 
-Interactive weather layers: Allow users to toggle different weather layers on the map, such as temperature, precipitation, wind speed, and satellite imagery.
 
-Current weather conditions: Show the current weather conditions for the user's location when the application is first opened. Use browser geolocation to get the user's coordinates and display the weather information.
-
-Dark mode: Implement a dark mode for your application that switches the map and interface colors to a darker theme, making it easier on the eyes in low-light environments.
 
 Historical weather data: Allow users to explore historical weather data for a specific date or range of dates. This feature can help users understand weather patterns and trends over time.
 
@@ -20,3 +12,6 @@ Local time and sunrise/sunset times: Display the current local time for the sear
 Air quality index: Show the air quality index for the searched location, informing users of potential pollution levels or health risks.
 
 Weather-related points of interest: Display nearby weather-related points of interest, such as ski resorts, beaches, or parks, to help users find outdoor activities based on the current weather conditions.
+
+add a dark mode , add a toggle forward and back button for toggling maps
+

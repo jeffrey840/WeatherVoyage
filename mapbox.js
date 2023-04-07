@@ -1,6 +1,7 @@
 
 import { MAPBOX_API_KEY} from './keys.js';
 import { appendImageToCard } from './pexelsAPI.js';
+import { createRadarLayer, addRadarControls } from './radar.js'; // Add this line
 
 const MAPBOX_ACCESS_TOKEN = MAPBOX_API_KEY;
 
@@ -52,32 +53,51 @@ function initMap(centerCoordinates, styleId) {
 
 const toggleMapButton = document.getElementById('toggle-map-button');
 let currentStyleIndex = 0;
-const styles = ['streets-v11','navigation-night-v1', 'outdoors-v11', 'light-v10', 'dark-v10', 'satellite-streets-v12','v1/adoucett/cjf5k84bp0p7t2rmiwvwikhyn'];
+const styles = [
+	'streets-v11',
+	'navigation-night-v1',
+	'outdoors-v11',
+	'light-v10',
+	'dark-v10',
+	'satellite-streets-v12',
+	'adoucett/cjf5k84bp0p7t2rmiwvwikhyn',
+];
 
-toggleMapButton.addEventListener('click', () => {
+toggleMapButton.addEventListener("click", () => {
 	currentStyleIndex = (currentStyleIndex + 1) % styles.length;
 	const styleId = styles[currentStyleIndex];
 	map.setStyle(`mapbox://styles/mapbox/${styleId}`);
+
+	map.once("styledata", () => {
+		createRadarLayer(map);
+	});
 });
+
 
 function initMapWithCurrentLocation() {
 	navigator.geolocation.getCurrentPosition(
 		(position) => {
-			const userCoordinates = [position.coords.longitude, position.coords.latitude];
-			initMap(userCoordinates, 'adoucett/cjf5k84bp0p7t2rmiwvwikhyn'); // Call initMap() with the custom style ID
+			const userCoordinates = [
+				position.coords.longitude,
+				position.coords.latitude,
+			];
+			initMap(userCoordinates, 'adoucett/cjf5k84bp0p7t2rmiwvwikhyn');
 
-			// Call appendImageToCard with the user's latitude and longitude
 			const userLat = position.coords.latitude;
 			const userLon = position.coords.longitude;
 			appendImageToCard(userLat, userLon);
+
+			// Wait for the map's style to load before adding the radar layer and controls
+			map.on('load', () => {
+				createRadarLayer(map);
+				addRadarControls(map);
+			});
 		},
 		(error) => {
 			console.error('Error getting user location:', error);
-			// Fall back to a default location (e.g., London) if the user's location cannot be determined
 			const defaultLocation = [-0.127647, 51.507222];
 			initMap(defaultLocation, styles[0]);
 
-			// Call appendImageToCard with the default location's latitude and longitude
 			const defaultLat = defaultLocation[1];
 			const defaultLon = defaultLocation[0];
 			appendImageToCard(defaultLat, defaultLon);
@@ -86,3 +106,5 @@ function initMapWithCurrentLocation() {
 }
 
 initMapWithCurrentLocation();
+
+

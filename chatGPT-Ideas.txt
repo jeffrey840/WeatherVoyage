@@ -1,8 +1,6 @@
 
 Weather alerts: Integrate weather alerts or severe weather warnings for the searched area, such as storm or flood warnings.
 
-Weather radar: Integrate a weather radar layer to display real-time precipitation data on the map. This will enable users to visualize storm movements and areas of heavy rainfall.
-
 Local time and sunrise/sunset times: Display the current local time for the searched location, along with sunrise and sunset times. This can help users understand daylight availability when planning outdoor activities.
 
 Air quality index: Show the air quality index for the searched location, informing users of potential pollution levels or health risks.

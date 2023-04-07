@@ -57,22 +57,34 @@ const styles = [
 	'streets-v11',
 	'navigation-night-v1',
 	'outdoors-v11',
-	'light-v10',
-	'dark-v10',
 	'satellite-streets-v12',
+	'styles/x-ray.JSON',
 	'adoucett/cjf5k84bp0p7t2rmiwvwikhyn',
+	// 'style/',
+	// 'style/',
+
 ];
+//delete camouiflage, dark matter, other, style
 
 toggleMapButton.addEventListener("click", () => {
 	currentStyleIndex = (currentStyleIndex + 1) % styles.length;
 	const styleId = styles[currentStyleIndex];
+
+	if (styleId.endsWith(".JSON" || ".json")) {
+		// Use the relative path for the JSON style
+		map.setStyle(styleId);
+	} else {
+		// Use the default Map.mapbox() syntax for the built-in styles
+		map.setStyle(`map//styles/map/mapbox/${styleId}`);
+	}
+
 	map.setStyle(`mapbox://styles/mapbox/${styleId}`);
 
 	map.once("styledata", () => {
 		createRadarLayer(map);
 	});
 });
-
+//other.json works , x-ray works
 function createDraggableMarker(map, coordinates) {
 	const marker = new mapboxgl.Marker({ draggable: true })
 		.setLngLat(coordinates)

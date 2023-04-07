@@ -52,7 +52,7 @@ function initMap(centerCoordinates, styleId) {
 
 const toggleMapButton = document.getElementById('toggle-map-button');
 let currentStyleIndex = 0;
-const styles = ['streets-v11','navigation-night-v1', 'outdoors-v11', 'light-v10', 'dark-v10', 'satellite-v9','v1/adoucett/cjf5k84bp0p7t2rmiwvwikhyn'];
+const styles = ['streets-v11','navigation-night-v1', 'outdoors-v11', 'light-v10', 'dark-v10', 'satellite-streets-v12','v1/adoucett/cjf5k84bp0p7t2rmiwvwikhyn'];
 
 toggleMapButton.addEventListener('click', () => {
 	currentStyleIndex = (currentStyleIndex + 1) % styles.length;

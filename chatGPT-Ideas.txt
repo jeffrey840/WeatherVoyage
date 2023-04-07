@@ -1,10 +1,6 @@
 
 Weather alerts: Integrate weather alerts or severe weather warnings for the searched area, such as storm or flood warnings.
 
-
-
-Historical weather data: Allow users to explore historical weather data for a specific date or range of dates. This feature can help users understand weather patterns and trends over time.
-
 Weather radar: Integrate a weather radar layer to display real-time precipitation data on the map. This will enable users to visualize storm movements and areas of heavy rainfall.
 
 Local time and sunrise/sunset times: Display the current local time for the searched location, along with sunrise and sunset times. This can help users understand daylight availability when planning outdoor activities.
@@ -12,6 +8,8 @@ Local time and sunrise/sunset times: Display the current local time for the sear
 Air quality index: Show the air quality index for the searched location, informing users of potential pollution levels or health risks.
 
 Weather-related points of interest: Display nearby weather-related points of interest, such as ski resorts, beaches, or parks, to help users find outdoor activities based on the current weather conditions.
+- foursquare poi api
+
 
 add a dark mode , add a toggle forward and back button for toggling maps
 

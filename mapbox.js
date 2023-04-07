@@ -73,6 +73,18 @@ toggleMapButton.addEventListener("click", () => {
 	});
 });
 
+function createDraggableMarker(map, coordinates) {
+	const marker = new mapboxgl.Marker({ draggable: true })
+		.setLngLat(coordinates)
+		.addTo(map);
+
+	marker.on('dragend', () => {
+		const newCoordinates = marker.getLngLat();
+		appendImageToCard(newCoordinates.lat, newCoordinates.lng);
+	});
+
+	return marker;
+}
 
 function initMapWithCurrentLocation() {
 	navigator.geolocation.getCurrentPosition(
@@ -91,6 +103,16 @@ function initMapWithCurrentLocation() {
 			map.on('load', () => {
 				createRadarLayer(map);
 				addRadarControls(map);
+				// Create the draggable marker after the map is loaded
+				const draggableMarker = createDraggableMarker(map, userCoordinates);
+				const toggleMarkerButton = document.getElementById('toggle-marker-button');
+				toggleMarkerButton.addEventListener('click', () => {
+					if (draggableMarker._map) {
+						draggableMarker.remove();
+					} else {
+						draggableMarker.addTo(map);
+					}
+				});
 			});
 		},
 		(error) => {

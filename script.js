@@ -1,15 +1,16 @@
-
 import { appendImageToCard  } from './pexelsAPI.js';
-
 import { geocode } from './mapbox.js';
 
+// Listen for the search form submission event
 document.getElementById('search-form').addEventListener('submit', (e) => {
-	e.preventDefault();
+	e.preventDefault(); // Prevent the default form submission behavior
+
+	// Get the search input value and use the Mapbox API to get the coordinates
 	const searchInput = document.getElementById('search-input').value;
 	geocode(searchInput)
 		.then(coordinates => {
 			if (coordinates) {
-				// Fetch new weather data and update the card
+				// If coordinates are found, use the Pexels API to fetch new weather data and update the card
 				appendImageToCard(coordinates[1], coordinates[0]);
 			}
 		})
@@ -18,6 +19,7 @@ document.getElementById('search-form').addEventListener('submit', (e) => {
 		});
 });
 
+// Toggle the search form visibility
 const searchForm = document.getElementById('search-form');
 const toggleSearchButton = document.getElementById('toggle-search-button');
 const icon = document.querySelector('#toggle-search-button i');
@@ -31,6 +33,7 @@ toggleSearchButton.addEventListener('click', () => {
 	}
 });
 
+// Toggle the 5 day forecast visibility
 const toggleCardsButton = document.getElementById('toggle-cards-button');
 toggleCardsButton.addEventListener('click', () => {
 	const cardContainer = document.getElementById('card-container');
@@ -42,7 +45,3 @@ toggleCardsButton.addEventListener('click', () => {
 		toggleCardsButton.textContent = 'Show 5 day forecast';
 	}
 });
-
-
-
-

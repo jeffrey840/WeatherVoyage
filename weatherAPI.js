@@ -1,14 +1,19 @@
 
 import { OPEN_WEATHER_APPID } from './keys.js';
+
+// Set the OpenWeatherMap API key
 const OPENWEATHERMAP_API_KEY = OPEN_WEATHER_APPID;
 
-
+// Function to fetch the current weather for a location given its latitude and longitude
 export function fetchCurrentWeather(lat, lon) {
+	// Construct the URL for the OpenWeatherMap API request
 	const url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&appid=${OPENWEATHERMAP_API_KEY}`;
 
+	// Make the API request and return a Promise that resolves to the weather data
 	return fetch(url)
 		.then(response => response.json())
 		.then(data => {
+			// Parse the weather data
 			const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 			const date = new Date(data.dt_txt);
 			const dayOfWeek = days[date.getDay()];
@@ -32,15 +37,18 @@ export function fetchCurrentWeather(lat, lon) {
 		});
 }
 
+// Function to fetch the forecast for a location given its latitude and longitude
 export function fetchForecast(lat, lon) {
+	// Construct the URL for the OpenWeatherMap API request
 	const url = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&units=metric&appid=${OPENWEATHERMAP_API_KEY}`;
 
+	// Make the API request and return a Promise that resolves to the forecast data
 	return fetch(url)
 		.then(response => response.json())
 		.then(data => {
+			// Parse the forecast data
 			const forecastData = data.list.filter((item, index) => index % 8 === 0).map(item => {
 				const temperatureFahrenheit = (item.main.temp * 9 / 5) + 32;
-				// const dayOfWeek = moment(item.dt_txt).format('dddd');
 				const date = new Date(item.dt_txt);
 				const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 				const dayOfWeek = days[date.getDay()];
@@ -69,6 +77,7 @@ export function fetchForecast(lat, lon) {
 		});
 }
 
+// Object that maps OpenWeatherMap weather descriptions to more specific keywords for the Pexels API
 export const weatherKeywords = {
 	'clear sky': 'clear',
 	'few clouds': 'partly cloudy',

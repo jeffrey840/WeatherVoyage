@@ -32,7 +32,27 @@ export function geocode(searchInput) {
 					zoom: 14,
 					essential: true
 				});
-				return coordinates; // Return the coordinates
+
+				// Construct the URL for the National Weather Service API to retrieve any alerts or warnings for the location
+				const nwsUrl = `https://api.weather.gov/alerts/active?point=${coordinates[1]},${coordinates[0]}`;
+				// Fetch the data from the API
+				return fetch(nwsUrl)
+					.then(response => response.json())
+					.then(alertData => {
+						if (alertData.features.length > 0) {
+							// If the data contains alerts or warnings, log the type of the first alert or warning
+							const alertType = alertData.features[0].properties.event;
+							console.log(`There is a ${alertType} warning/alert for this location.`);
+						} else {
+							// If there are no alerts or warnings, log a message to the console
+							console.log("There are no weather alerts or severe weather warnings for this location.");
+						}
+
+						return coordinates; // Return the coordinates
+					})
+					.catch(error => {
+						console.error("Error fetching weather alert data:", error);
+					});
 			} else {
 				// If the data does not contain a feature, alert the user and return null
 				alert('Location not found. Please try another search.');
@@ -43,6 +63,7 @@ export function geocode(searchInput) {
 			console.error("Error fetching geocoding data:", error);
 		});
 }
+
 
 // Define a function that initializes the map
 function initMap(centerCoordinates, styleId) {
@@ -104,12 +125,18 @@ function createDraggableMarker(map, coordinates) {
 	marker.on('dragend', () => {
 		// Get the new coordinates after the marker is dragged
 		const newCoordinates = marker.getLngLat();
-		// Call the appendImageToCard function with the new latitude and longitude values
-		appendImageToCard(newCoordinates.lat, newCoordinates.lng);
+		// Call the geocode function to get weather alerts for the new location
+		geocode(`${newCoordinates.lng},${newCoordinates.lat}`).then(coordinates => {
+			// If coordinates are returned, log the weather alert for the new location
+			if (coordinates) {
+				console.log(`Weather alert for new location: ${coordinates}`);
+			}
+		});
 	});
 	// Return the marker object
 	return marker;
 }
+
 
 // This function initializes the map with the user's current location
 function initMapWithCurrentLocation() {

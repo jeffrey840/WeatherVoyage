@@ -1,21 +1,31 @@
-
+// Import the Mapbox API key from the keys.js file
 import { MAPBOX_API_KEY} from './keys.js';
-import { appendImageToCard } from './pexelsAPI.js';
-import { createRadarLayer, addRadarControls } from './radar.js'; // Add this line
 
+// Import the appendImageToCard function from the pexelsAPI.js file
+import { appendImageToCard } from './pexelsAPI.js';
+
+// Import the createRadarLayer and addRadarControls functions from the radar.js file
+import { createRadarLayer, addRadarControls } from './radar.js';
+
+// Set the Mapbox access token to the imported API key
 const MAPBOX_ACCESS_TOKEN = MAPBOX_API_KEY;
 
+// Declare the map variable
 let map;
 
+// Set the Mapbox access token
 mapboxgl.accessToken = MAPBOX_ACCESS_TOKEN;
 
+// Define a function that retrieves the coordinates for a search query
 export function geocode(searchInput) {
+	// Construct the URL for the Mapbox Geocoding API
 	const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(searchInput)}.json?access_token=${MAPBOX_ACCESS_TOKEN}`;
-
+	// Fetch the data from the API
 	return fetch(url)
 		.then(response => response.json())
 		.then(data => {
 			if (data.features.length > 0) {
+				// If the data contains a feature, fly to its coordinates and return the coordinates
 				const coordinates = data.features[0].geometry.coordinates;
 				map.flyTo({
 					center: coordinates,
@@ -24,6 +34,7 @@ export function geocode(searchInput) {
 				});
 				return coordinates; // Return the coordinates
 			} else {
+				// If the data does not contain a feature, alert the user and return null
 				alert('Location not found. Please try another search.');
 				return null;
 			}
@@ -33,12 +44,14 @@ export function geocode(searchInput) {
 		});
 }
 
+// Define a function that initializes the map
 function initMap(centerCoordinates, styleId) {
+	// Set the style URL based on the provided style ID
 	let styleUrl = `mapbox://styles/mapbox/${styleId}`;
 	if (styleId === 'adoucett/cjf5k84bp0p7t2rmiwvwikhyn') {
 		styleUrl = `mapbox://styles/${styleId}`;
 	}
-
+	// Create a new Mapbox map with the provided center coordinates and style
 	map = new mapboxgl.Map({
 		container: 'map',
 		style: styleUrl,
@@ -47,10 +60,7 @@ function initMap(centerCoordinates, styleId) {
 	});
 }
 
-//mapbox://styles/adoucett/cjf5k84bp0p7t2rmiwvwikhyn
-
-//mapbox://styles/mapbox/navigation-night-v1
-
+// Define an array of Mapbox styles and a variable to track the current style index
 const toggleMapButton = document.getElementById('toggle-map-button');
 let currentStyleIndex = 0;
 const styles = [
@@ -62,14 +72,14 @@ const styles = [
 	'adoucett/cjf5k84bp0p7t2rmiwvwikhyn',
 	// 'style/',
 	// 'style/',
-
 ];
-//delete camouiflage, dark matter, other, style
 
+// Add an event listener to the toggle map button
 toggleMapButton.addEventListener("click", () => {
+	// Update the current style index and retrieve the style ID for the new style
 	currentStyleIndex = (currentStyleIndex + 1) % styles.length;
 	const styleId = styles[currentStyleIndex];
-
+	// Determine whether the style is a JSON file or a built-in Mapbox style and set the style URL accordingly
 	if (styleId.endsWith(".JSON" || ".json")) {
 		// Use the relative path for the JSON style
 		map.setStyle(styleId);
@@ -84,41 +94,50 @@ toggleMapButton.addEventListener("click", () => {
 		createRadarLayer(map);
 	});
 });
-//other.json works , x-ray works
+
+// This function creates a draggable marker on the map with the specified coordinates
 function createDraggableMarker(map, coordinates) {
 	const marker = new mapboxgl.Marker({ draggable: true })
 		.setLngLat(coordinates)
 		.addTo(map);
-
+	// Add an event listener for when the marker is dragged
 	marker.on('dragend', () => {
+		// Get the new coordinates after the marker is dragged
 		const newCoordinates = marker.getLngLat();
+		// Call the appendImageToCard function with the new latitude and longitude values
 		appendImageToCard(newCoordinates.lat, newCoordinates.lng);
 	});
-
+	// Return the marker object
 	return marker;
 }
 
+// This function initializes the map with the user's current location
 function initMapWithCurrentLocation() {
+	// Get the user's current position
 	navigator.geolocation.getCurrentPosition(
 		(position) => {
+			// Get the user's coordinates from the position object
 			const userCoordinates = [
 				position.coords.longitude,
 				position.coords.latitude,
 			];
+			// Initialize the map with the user's coordinates and a specific map style
 			initMap(userCoordinates, 'adoucett/cjf5k84bp0p7t2rmiwvwikhyn');
-
+			// Get the latitude and longitude values from the user's coordinates
 			const userLat = position.coords.latitude;
 			const userLon = position.coords.longitude;
+			// Call the appendImageToCard function with the user's latitude and longitude values
 			appendImageToCard(userLat, userLon);
 
 			// Wait for the map's style to load before adding the radar layer and controls
 			map.on('load', () => {
 				createRadarLayer(map);
 				addRadarControls(map);
-				// Create the draggable marker after the map is loaded
+				// Create a draggable marker with the user's coordinates after the map is loaded
 				const draggableMarker = createDraggableMarker(map, userCoordinates);
 				const toggleMarkerButton = document.getElementById('toggle-marker-button');
 				toggleMarkerButton.addEventListener('click', () => {
+					/// If the draggable marker is on the map, remove it; otherwise, add it to the map
 					if (draggableMarker._map) {
 						draggableMarker.remove();
 					} else {
@@ -129,16 +148,19 @@ function initMapWithCurrentLocation() {
 		},
 		(error) => {
 			console.error('Error getting user location:', error);
+			// If there is an error getting the user's location, initialize the map with a default location
 			const defaultLocation = [-0.127647, 51.507222];
 			initMap(defaultLocation, styles[0]);
 
+			// Get the latitude and longitude values from the default location
 			const defaultLat = defaultLocation[1];
 			const defaultLon = defaultLocation[0];
+			// Call the appendImageToCard function with the default latitude and longitude values
 			appendImageToCard(defaultLat, defaultLon);
 		}
 	);
 }
-
+// Call the initMapWithCurrentLocation function to initialize the map with the user's current location
 initMapWithCurrentLocation();
 
 

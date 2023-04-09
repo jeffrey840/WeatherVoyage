@@ -1,5 +1,4 @@
 
-Weather alerts: Integrate weather alerts or severe weather warnings for the searched area, such as storm or flood warnings.
 
 Local time and sunrise/sunset times: Display the current local time for the searched location, along with sunrise and sunset times. This can help users understand daylight availability when planning outdoor activities.
 
@@ -9,5 +8,16 @@ Weather-related points of interest: Display nearby weather-related points of int
 - foursquare poi api
 
 
-add a dark mode , add a toggle forward and back button for toggling maps
+cards:
+append the weather alert if any in the first card/createdraggablemarker()/geocode()/
+have card show the current city and state
+fix the sizing for the image in the cards
+show air quality index
+show teh sunset and sunrise times for the location and append it to all of the cards
+
+files:
+separate mapbox.js into different modules
+
+html:
+remove the toggle map button and the corresponding functions, test the app.
 

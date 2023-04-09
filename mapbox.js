@@ -89,32 +89,62 @@ const styles = [
 	'navigation-night-v1',
 	'outdoors-v11',
 	'satellite-streets-v12',
-	'styles/x-ray.JSON',
+	// 'styles/x-ray.JSON',
 	'adoucett/cjf5k84bp0p7t2rmiwvwikhyn',
 	// 'style/',
 	// 'style/',
 ];
 
+const styleForwardButton = document.getElementById('style-forward');
+const styleBackwardButton = document.getElementById('style-backward');
+
+styleForwardButton.addEventListener("click", () => {
+	// Update the current style index and retrieve the style ID for the new style
+	currentStyleIndex = (currentStyleIndex + 1) % styles.length;
+	updateMapStyle();
+});
+
+styleBackwardButton.addEventListener("click", () => {
+	// Update the current style index and retrieve the style ID for the new style
+	currentStyleIndex = (currentStyleIndex - 1 + styles.length) % styles.length;
+	updateMapStyle();
+});
+
+function updateMapStyle() {
+	const styleId = styles[currentStyleIndex];
+	// Determine whether the style is a JSON file or a built-in Mapbox style and set the style URL accordingly
+	let styleUrl;
+	if (styleId === 'adoucett/cjf5k84bp0p7t2rmiwvwikhyn') {
+		styleUrl = `mapbox://styles/${styleId}`;
+	} else {
+		// Use the default Map.mapbox() syntax for the built-in styles
+		styleUrl = `mapbox://styles/mapbox/${styleId}`;
+	}
+
+	map.setStyle(styleUrl);
+
+	map.once("styledata", () => {
+		createRadarLayer(map);
+	});
+}
+
 // Add an event listener to the toggle map button
 toggleMapButton.addEventListener("click", () => {
 	// Update the current style index and retrieve the style ID for the new style
 	currentStyleIndex = (currentStyleIndex + 1) % styles.length;
+	if (styles[currentStyleIndex] === 'adoucett/cjf5k84bp0p7t2rmiwvwikhyn') {
+		currentStyleIndex = (currentStyleIndex + 1) % styles.length;
+	}
+	updateMapStyle();
 	const styleId = styles[currentStyleIndex];
 	// Determine whether the style is a JSON file or a built-in Mapbox style and set the style URL accordingly
-	if (styleId.endsWith(".JSON" || ".json")) {
-		// Use the relative path for the JSON style
-		map.setStyle(styleId);
-	} else {
-		// Use the default Map.mapbox() syntax for the built-in styles
-		map.setStyle(`map//styles/map/mapbox/${styleId}`);
-	}
-
 	map.setStyle(`mapbox://styles/mapbox/${styleId}`);
 
 	map.once("styledata", () => {
 		createRadarLayer(map);
 	});
 });
+
 
 // This function creates a draggable marker on the map with the specified coordinates
 function createDraggableMarker(map, coordinates) {
@@ -125,12 +155,14 @@ function createDraggableMarker(map, coordinates) {
 	marker.on('dragend', () => {
 		// Get the new coordinates after the marker is dragged
 		const newCoordinates = marker.getLngLat();
+		appendImageToCard(newCoordinates.lat, newCoordinates.lng);
 		// Call the geocode function to get weather alerts for the new location
 		geocode(`${newCoordinates.lng},${newCoordinates.lat}`).then(coordinates => {
 			// If coordinates are returned, log the weather alert for the new location
 			if (coordinates) {
 				console.log(`Weather alert for new location: ${coordinates}`);
 			}
+
 		});
 	});
 	// Return the marker object

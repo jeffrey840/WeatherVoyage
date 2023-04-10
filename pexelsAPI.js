@@ -11,6 +11,7 @@ export function appendImageToCard(lat, lon) {
 	fetchCurrentWeather(lat, lon)
 		.then(currentWeather => {
 			// Use current weather description and city name in the Pexels API query
+			const location = `${currentWeather.city},${currentWeather.state},${currentWeather.country}`;
 			let keyword = currentWeather.description.toLowerCase();
 			if (keyword in weatherKeywords) {
 				keyword = weatherKeywords[keyword];
@@ -52,10 +53,10 @@ export function appendImageToCard(lat, lon) {
 							});
 
 							// Create cards for both the current weather and the forecast data
-							const currentWeatherCard = createCard(imageUrls[0], currentWeather, 'Now', true);
+							const currentWeatherCard = createCard(imageUrls[0], currentWeather, 'Now', location, true);
 
 							const forecastCards = forecastData.map((day, index) => {
-								return createCard(imageUrls[index+1], day, day.date, false);
+								return createCard(imageUrls[index + 1], day, day.date, location, false);
 							});
 
 							// Combine the cards into a single string and add them to the card container

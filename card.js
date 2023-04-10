@@ -1,4 +1,4 @@
-export function createCard(imageUrl, weather, day, hideDayOfWeek = false) {
+export function createCard(imageUrl, weather, day, location, hideDayOfWeek = false) {
 	return `
         <div class="card mb-3 w-100">
             <div class="row g-0">
@@ -6,7 +6,8 @@ export function createCard(imageUrl, weather, day, hideDayOfWeek = false) {
                     <img src="${imageUrl}" class="card-img" alt="Weather image">
                 </div>
                 <div class="col-md-8">
-                    <div class="card-body">
+                    <div class="card-body">                       
+                        ${hideDayOfWeek ? ` <h5 class="card-title">${location}</h5> ` : ''}
                         <div class="row">
                             <div class="col-md-6">
                                 <p class="card-text">${day}</p>

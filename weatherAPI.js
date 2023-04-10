@@ -91,6 +91,24 @@ export function fetchForecast(lat, lon) {
 		});
 }
 
+export function fetchWeatherAlert(lat, lon) {
+	const nwsUrl = `https://api.weather.gov/alerts/active?point=${lat},${lon}`;
+	return fetch(nwsUrl)
+		.then(response => response.json())
+		.then(alertData => {
+			if (alertData.features.length > 0) {
+				const alertType = alertData.features[0].properties.event;
+				return alertType;
+			} else {
+				return "";
+			}
+		})
+		.catch(error => {
+			console.error("Error fetching weather alert data:", error);
+		});
+}
+
+
 // Object that maps OpenWeatherMap weather descriptions to more specific keywords for the Pexels API
 export const weatherKeywords = {
 	'clear sky': 'clear',

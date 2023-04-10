@@ -2,63 +2,44 @@
 import {PEXEL_API_KEY} from './keys.js';
 const PEXELS_API_KEY = PEXEL_API_KEY;
 
-import { fetchCurrentWeather, fetchForecast, weatherKeywords } from './weatherAPI.js';
+import { fetchCurrentWeather, fetchForecast, weatherKeywords, fetchWeatherAlert } from './weatherAPI.js';
 
 import { createCard } from './card.js';
 
 export function appendImageToCard(lat, lon) {
-	// Fetch current weather data first
-	fetchCurrentWeather(lat, lon)
-		.then(currentWeather => {
+	// Fetch current weather data and weather alert
+	Promise.all([fetchCurrentWeather(lat, lon), fetchWeatherAlert(lat, lon)])
+		.then(([currentWeather, weatherAlert]) => {
 			// Use current weather description and city name in the Pexels API query
-			const location = `${currentWeather.city},${currentWeather.state},${currentWeather.country}`;
+			const location = `${currentWeather.city}, ${currentWeather.state}, ${currentWeather.country}`;
 			let keyword = currentWeather.description.toLowerCase();
 			if (keyword in weatherKeywords) {
 				keyword = weatherKeywords[keyword];
 			} else {
 				keyword = currentWeather.description;
 			}
-			const pexelsUrl = `https://api.pexels.com/v1/search?query=${encodeURIComponent(keyword + ' ' + currentWeather.city)}&per_page=1&page=${Math.floor(Math.random() * 100)}`;
+			const pexelsUrl = `https://api.pexels.com/v1/search?query=${encodeURIComponent(keyword + ' ' + currentWeather.city)}&per_page=6&page=${Math.floor(Math.random() * 100)}`;
 
 			// Fetch forecast data next
 			fetchForecast(lat, lon)
 				.then(forecastData => {
-					// Create an array of Pexels API URLs to fetch images for each forecast day
-					const pexelsUrls = forecastData.map(day => {
-						let keyword = day.description.toLowerCase();
-						if (keyword in weatherKeywords) {
-							keyword = weatherKeywords[keyword];
-						} else {
-							keyword = day.description;
+					// Fetch the images for the current weather and forecast data
+					fetch(pexelsUrl, {
+						headers: {
+							'Authorization': PEXELS_API_KEY
 						}
-						return `https://api.pexels.com/v1/search?query=${encodeURIComponent(keyword + ' ' + currentWeather.city)}&per_page=1&page=${Math.floor(Math.random() * 100)}`;
-					});
-
-					// Add the current weather URL to the array of Pexels API URLs
-					pexelsUrls.unshift(pexelsUrl);
-
-					// Use Promise.all() to fetch all the images at once
-					Promise.all(pexelsUrls.map(url => {
-						return fetch(url, {
-							headers: {
-								'Authorization': PEXELS_API_KEY
-							}
-						})
-							.then(response => response.json())
-					}))
-						.then(responses => {
-							// Extract the image URLs from each Pexels API response
-							const imageUrls = responses.map(response => {
-								return response.photos[0].src.large;
-							});
+					})
+						.then(response => response.json())
+						.then(response => {
+							// Extract the image URLs from the Pexels API response
+							const imageUrls = response.photos.map(photo => photo.src.large);
 
 							// Create cards for both the current weather and the forecast data
-							const currentWeatherCard = createCard(imageUrls[0], currentWeather, 'Now', location, true);
+							const currentWeatherCard = createCard(imageUrls[0], currentWeather, 'Now', location, weatherAlert, true);
 
 							const forecastCards = forecastData.map((day, index) => {
-								return createCard(imageUrls[index + 1], day, day.date, location, false);
+								return createCard(imageUrls[index + 1], day, day.date, location, null, false);
 							});
-
 							// Combine the cards into a single string and add them to the card container
 							const cards = [currentWeatherCard, ...forecastCards].join('');
 							const cardContainer = document.getElementById('card-container');
@@ -73,7 +54,7 @@ export function appendImageToCard(lat, lon) {
 				});
 		})
 		.catch(error => {
-			console.error("Error fetching weather data:", error);
+			console.error("Error fetching weather data and/or weather alert:", error);
 		});
 }
 

@@ -1,4 +1,4 @@
-export function createCard(imageUrl, weather, day, location, hideDayOfWeek = false) {
+export function createCard(imageUrl, weather, day, location, weatherAlert = "", hideDayOfWeek = false) {
 	return `
         <div class="card mb-3 w-100">
             <div class="row g-0">
@@ -16,6 +16,7 @@ export function createCard(imageUrl, weather, day, location, hideDayOfWeek = fal
                                 <p class="card-text">${weather.description}</p>
                             </div>
                             <div class="col-md-6">
+                                ${weatherAlert ? ` <p class="card-text text-danger">Alert: ${weatherAlert}</p> ` : ''}                                
                                 <p class="card-text">
                                     <i class="fa-solid fa-wind"></i> Wind: ${weather.windSpeed} m/s
                                 </p>

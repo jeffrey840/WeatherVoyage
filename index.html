@@ -7,6 +7,8 @@
 
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
+	<link rel="preconnect" href="https://fonts.gstatic.com">
+	<link href="https://fonts.googleapis.com/css2?family=Open+Sans&family=Montserrat&display=swap" rel="stylesheet">
 
 	<!-- Mapbox GL CSS -->
 <!--	<link href="https://api.mapbox.com/mapbox-gl-js/v2.6.1/mapbox-gl.css" rel="stylesheet">-->
@@ -33,7 +35,7 @@
 
 <div id="map" style="width: 100%; height: 100vh;">
 
-	<nav class="navbar navbar-expand-lg navbar-light bg-light">
+	<nav class="navbar navbar-expand-lg  ">
 		<div class="container-fluid">
 			<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
 				<span class="navbar-toggler-icon"></span>
@@ -43,9 +45,9 @@
 					<li class="nav-item">
 						<button id="toggle-cards-button" class="btn btn-primary">Show 5 day forecast</button>
 					</li>
-					<li class="nav-item">
-						<button id="toggle-map-button" class="btn btn-primary">Toggle Map</button>
-					</li>
+<!--					<li class="nav-item">-->
+<!--						<button id="toggle-map-button" class="btn btn-primary">Toggle Map</button>-->
+<!--					</li>-->
 					<li class="nav-item">
 						<button id="toggle-radar" class="btn btn-primary">Toggle Radar</button>
 					</li>
@@ -53,10 +55,10 @@
 						<button id="toggle-marker-button" class="btn btn-primary">Toggle Marker</button>
 					</li>
 					<li class="nav-item">
-						<button id="style-backward" class="btn btn-primary">Style Backward</button>
+						<button id="style-backward" class="btn btn-primary">Previous map style</button>
 					</li>
 					<li class="nav-item">
-						<button id="style-forward" class="btn btn-primary">Style Forward</button>
+						<button id="style-forward" class="btn btn-primary">Next map style</button>
 					</li>
 				</ul>
 				<div id="search-container" class="d-flex align-items-center">

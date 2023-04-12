@@ -3,27 +3,12 @@
 /*    border:solid red 1px*/
 /*}*/
 
-@import url('https://fonts.googleapis.com/css?family=Open+Sans:400,700|Montserrat:400,700&display=swap');
-
-
 :root {
     --sunset-color: #c78a44;
     --cloud-color: #d8b26e;
     --sea-color: #dad5d2;
     --deep-sea-color: #b4c1c5;
     --text-color: #5f7782;
-}
-
-body {
-    font-family: 'Open Sans', sans-serif;
-}
-
-p {
-    font-family: 'Montserrat', sans-serif;
-}
-
-#search-container {
-    margin-left: auto;
 }
 
 #search-container .search-wrapper {
@@ -39,18 +24,12 @@ p {
     display: none;
 }
 
-#search-input {
-    width: 300px;
-    margin-right: 10px;
-}
-
 #cards-container {
     position: absolute;
     top: 50px;
     left: 0;
     right: 0;
     z-index: 1;
-    max-width: calc(100vw - 20px);
 }
 
 .card {
@@ -71,6 +50,10 @@ p {
     padding: 1rem;
 }
 
+#card-container.hidden {
+    display: none;
+}
+
 #card-container {
     overflow-y: auto;
     max-height: calc(100vh - 100px);
@@ -78,35 +61,42 @@ p {
     padding-right: 10px;
 }
 
-#card-container.hidden {
+#card-container::-webkit-scrollbar {
     display: none;
 }
 
-#card-container::-webkit-scrollbar {
-    display: none;
+
+#toggle-cards-button.show {
+    top: 120px;
 }
 
 .cards-wrapper {
     max-width: calc(100vw - 60px);
 }
 
-#toggle-cards-button {
-    margin-right: 10px;
-}
-
-#toggle-cards-button.show {
-    top: 120px;
+#cards-container {
+    max-width: calc(100vw - 20px);
 }
 
 .navbar {
     z-index: 2;
-    background: transparent;
 }
+
+#toggle-cards-button {
+    margin-right: 10px;
+}
+
+#search-container {
+    margin-left: auto;
+}
+
+#search-input {
+    width: 300px;
+    margin-right: 10px;
+}
+
 
 .nav-btn {
     display: none;
 }
 
-.nav {
-    background: red;
-}

@@ -3,7 +3,7 @@ export function createCard(imageUrl, weather, day, location, weatherAlert = "", 
         <div class="card mb-3 w-100">
             <div class="row g-0">
                 <div class="col-md-4">
-                    <img src="${imageUrl}" class="card-img" alt="Weather image">
+                    <img src="${imageUrl}" class="card-img" alt="Weather image" width="200" height="200">
                 </div>
                 <div class="col-md-8">
                     <div class="card-body">                       

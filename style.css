@@ -6,13 +6,6 @@
 @import url('https://fonts.googleapis.com/css?family=Open+Sans:400,700|Montserrat:400,700&display=swap');
 
 
-:root {
-    --sunset-color: #c78a44;
-    --cloud-color: #d8b26e;
-    --sea-color: #dad5d2;
-    --deep-sea-color: #b4c1c5;
-    --text-color: #5f7782;
-}
 
 body {
     font-family: 'Open Sans', sans-serif;
@@ -114,29 +107,6 @@ p {
 .nav {
     background: red;
 }
-.sunset-color {
-    background-color: var(--sunset-color);
-    border-bottom: 5px solid #a36c33;
-    text-shadow: 0px -2px #a36c33;
-}
-
-.cloud-color {
-    background-color: var(--cloud-color);
-    border-bottom: 5px solid #a57a2a;
-    text-shadow: 0px -2px #a57a2a;
-}
-
-.sea-color {
-    background-color: var(--sea-color);
-    border-bottom: 5px solid #858585;
-    text-shadow: 0px -2px #858585;
-}
-
-.deep-sea-color {
-    background-color: var(--deep-sea-color);
-    border-bottom: 5px solid #2e353b;
-    text-shadow: 0px -2px #2e353b;
-}
 
 .btn-bounce {
     transition: all 0.1s;
@@ -185,3 +155,92 @@ p {
     box-shadow: none;
     transform: translateY(5px);
 }
+
+.btn-secondary {
+    background-color: #6c757d;
+    color: #fff;
+    border-radius: 5px;
+    border: none;
+    box-shadow: 0px 5px 0px #545b62;
+    transition: all 0.3s ease;
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
+.btn-secondary:hover {
+    box-shadow: 0px 2px 0px #545b62;
+    transform: translateY(3px);
+}
+.btn-secondary:active {
+    box-shadow: none;
+    transform: translateY(5px);
+}
+
+.btn-success {
+    background-color: #198754;
+    color: #fff;
+    border-radius: 5px;
+    border: none;
+    box-shadow: 0px 5px 0px #126038;
+    transition: all 0.3s ease;
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
+.btn-success:hover {
+    box-shadow: 0px 2px 0px #126038;
+    transform: translateY(3px);
+}
+.btn-success:active {
+    box-shadow: none;
+    transform: translateY(5px);
+}
+
+.btn-dark {
+    background-color: #343a40;
+    color: white;
+    border-radius: 5px;
+    border: none;
+    box-shadow: 0px 5px 0px #1d2124;
+    transition: all 0.3s ease;
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
+.btn-dark:hover {
+    box-shadow: 0px 2px 0px #1d2124;
+    transform: translateY(3px);
+}
+.btn-dark:active {
+    box-shadow: none;
+    transform: translateY(5px);
+}
+
+.btn-danger {
+    background-color: #dc3545;
+    color: white;
+    border-radius: 5px;
+    border: none;
+    box-shadow: 0px 5px 0px #bd2130;
+    transition: all 0.3s ease;
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
+.btn-danger:hover {
+    box-shadow: 0px 2px 0px #bd2130;
+    transform: translateY(3px);
+}
+.btn-danger:active {
+    box-shadow: none;
+    transform: translateY(5px);
+}
+
+
+/*
+
+
+
+
+
+
+*/
+
+
+

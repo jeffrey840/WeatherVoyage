@@ -3,13 +3,7 @@
 Local time and sunrise/sunset times: Display the current local time for the searched location, along with sunrise and sunset times.
 This can help users understand daylight availability when planning outdoor activities.
 
-Weather-related points of interest:
-Display nearby weather-related points of interest, such as ski resorts, beaches, or parks, to help users find outdoor activities based on the current weather conditions.
-- foursquare poi api
-
-
 cards:
-fix the sizing for the image in the cards
 show the sunset and sunrise times for the location and append it to all of the cards
 
 files:

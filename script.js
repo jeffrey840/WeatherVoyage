@@ -45,3 +45,12 @@ toggleCardsButton.addEventListener('click', () => {
 		toggleCardsButton.textContent = 'Show 5 day forecast';
 	}
 });
+
+$(document).ready(function() {
+	$('.btn').click(function() {
+		$(this).addClass('btn-bounce');
+		setTimeout(() => $(this).removeClass('btn-bounce'), 900);
+	});
+});
+
+

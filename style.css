@@ -1,11 +1,9 @@
 
-* {
-    border:solid red 1px
-}
-
 @import url('https://fonts.googleapis.com/css?family=Open+Sans:400,700|Montserrat:400,700&display=swap');
 
-
+/** {*/
+/*    border:solid red 1px*/
+/*}*/
 
 body {
     font-family: 'Open Sans', sans-serif;
@@ -232,15 +230,6 @@ p {
     transform: translateY(5px);
 }
 
-
-/*
-
-
-
-
-
-
-*/
 
 
 

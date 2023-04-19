@@ -128,22 +128,6 @@ function updateMapStyle() {
 	});
 }
 
-// // Add an event listener to the toggle map button
-// toggleMapButton.addEventListener("click", () => {
-// 	// Update the current style index and retrieve the style ID for the new style
-// 	currentStyleIndex = (currentStyleIndex + 1) % styles.length;
-// 	if (styles[currentStyleIndex] === 'adoucett/cjf5k84bp0p7t2rmiwvwikhyn') {
-// 		currentStyleIndex = (currentStyleIndex + 1) % styles.length;
-// 	}
-// 	updateMapStyle();
-// 	const styleId = styles[currentStyleIndex];
-// 	// Determine whether the style is a JSON file or a built-in Mapbox style and set the style URL accordingly
-// 	map.setStyle(`mapbox://styles/mapbox/${styleId}`);
-//
-// 	map.once("styledata", () => {
-// 		createRadarLayer(map);
-// 	});
-// });
 
 
 // This function creates a draggable marker on the map with the specified coordinates

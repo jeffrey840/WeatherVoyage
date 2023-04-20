@@ -8,3 +8,8 @@ The application features several user-friendly options including a precipitation
 
 ## technologies used:
 Weather Voyage is built using a range of frameworks and technologies including HTML, CSS, Bootstrap, and Javascript, Jquery. Several APIs are used to provide accurate and timely weather information to users including the National Weather Service API, Pexels API, Open Weather Map API and The Mapbox API
+
+
+
+https://user-images.githubusercontent.com/106411997/233248747-1f06da1a-d822-41ba-a97e-5f2e37c2ef08.mov
+
